@@ -26,6 +26,7 @@ class ball(object):
     #Recorrido de La Pelota
     @staticmethod
     def ballPath(startx, starty, power, ang, time):
+        
         angle = ang         #Angulo
         #Velocidad
         velx = math.cos(angle) * power
@@ -39,8 +40,6 @@ class ball(object):
 
         newx = round(distX + startx)
         newy = round(starty - distY)
-        trajectoryLaunch.append(startx)
-        trajectoryLaunch.append(starty)
         trajectoryLaunch.append(newx)
         trajectoryLaunch.append(newy)
         return (newx, newy)
@@ -54,11 +53,11 @@ def redrawWindow(shooted):
     pygame.draw.line(win, (0,0,0),line[0], line[1])
     if shooted:
         for i in range(int(len(trajectoryLaunch)/4)):
-            x1=trajectoryLaunch[i]
-            y1=trajectoryLaunch[i+1]
-            x2=trajectoryLaunch[i+2]
-            y2=trajectoryLaunch[i+3]
-            pygame.draw.line(win, (255,0,0),(x1,y1), (x2,y2))
+            x1=trajectoryLaunch[(i*4)]
+            y1=trajectoryLaunch[(i*4)+1]
+            x2=trajectoryLaunch[(i*4)+2]
+            y2=trajectoryLaunch[(i*4)+3]
+            pygame.draw.line(win, (255,0,0),(x1,y1), (x2,y2),width=2)
     else:
         trajectoryLaunch.clear()
     pygame.display.update()
@@ -97,10 +96,14 @@ while run:
     clock.tick(200)
     if shoot:
         if golfBall.y < 500 - golfBall.radius:
+            trajectoryLaunch.append(golfBall.x)
+            trajectoryLaunch.append(golfBall.y)
             time += 0.05
             po = ball.ballPath(x, y, power, angle, time)
             golfBall.x = po[0]
             golfBall.y = po[1]
+            trajectoryLaunch.append(golfBall.x)
+            trajectoryLaunch.append(golfBall.y)
         else:
             shoot = False
             time = 0
