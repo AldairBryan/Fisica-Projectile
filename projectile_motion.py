@@ -2,13 +2,15 @@ from pickletools import pyfloat
 import pygame
 import math
 
+#Tamaño de la Pantalla
 wScreen = 1200
 hScreen = 500
 
+#Inicializa
 win = pygame.display.set_mode((wScreen,hScreen))
 pygame.display.set_caption('Projectile Motion')
 
-
+#Objeto Pelota
 class ball(object):
     def __init__(self,x,y,radius,color):
         self.x = x
@@ -21,27 +23,33 @@ class ball(object):
         pygame.draw.circle(win, self.color, (self.x,self.y), self.radius-1)
 
 
+    #Recorrido de La Pelota
     @staticmethod
     def ballPath(startx, starty, power, ang, time):
-        angle = ang
+        angle = ang         #Angulo
+        #Velocidad
         velx = math.cos(angle) * power
         vely = math.sin(angle) * power
 
+        gravedad=9.8
+
+        #Movimiento
         distX = velx * time
-        distY = (vely * time) + ((-9.8 * (time ** 2)) / 2)  #Gravedad
+        distY = (vely * time) + ((-gravedad * (time ** 2)) / 2)  #Gravedad
 
         newx = round(distX + startx)
         newy = round(starty - distY)
         #pygame.draw.line(win,(255,0,0), (newx,newy,1,1))
         return (newx, newy)
 
-
+#Iniciar
 def redrawWindow():
     win.fill((64,64,64))
     golfBall.draw(win)
     pygame.draw.line(win, (0,0,0),line[0], line[1])
     pygame.display.update()
 
+#Encontrar El angulo
 def findAngle(pos):
     sX = golfBall.x
     sY = golfBall.y
@@ -62,6 +70,7 @@ def findAngle(pos):
     return angle
 
 
+#Inicializar Pelota, Posicion, Color
 golfBall = ball(300,494,5,(255,255,255))
 
 run = True
