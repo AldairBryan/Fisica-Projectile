@@ -9,6 +9,8 @@ hScreen = 500
 #Inicializa
 win = pygame.display.set_mode((wScreen,hScreen))
 pygame.display.set_caption('Projectile Motion')
+pygame.font.init()
+my_font = pygame.font.SysFont('Comic Sans MS', 23)
 
 #Objeto Pelota
 class ball(object):
@@ -44,6 +46,8 @@ class ball(object):
         trajectoryLaunch.append(newy)
         return (newx, newy)
 
+#Mostrar Posicion
+
 #Iniciar
 trajectoryLaunch=[]
 
@@ -51,6 +55,10 @@ def redrawWindow(shooted):
     win.fill((64,64,64))
     golfBall.draw(win)
     pygame.draw.line(win, (0,0,0),line[0], line[1])
+
+    text_surface = my_font.render('X:'+str(line[0][0])+'  Y: '+str(line[0][1]), False, (0, 0, 0))
+    win.blit(text_surface, (line[0][0],line[0][1]))
+
     if shooted:
         for i in range(int(len(trajectoryLaunch)/4)):
             x1=trajectoryLaunch[(i*4)]
