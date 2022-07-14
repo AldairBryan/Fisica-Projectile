@@ -39,14 +39,28 @@ class ball(object):
 
         newx = round(distX + startx)
         newy = round(starty - distY)
-        #pygame.draw.line(win,(255,0,0), (newx,newy,1,1))
+        trajectoryLaunch.append(startx)
+        trajectoryLaunch.append(starty)
+        trajectoryLaunch.append(newx)
+        trajectoryLaunch.append(newy)
         return (newx, newy)
 
 #Iniciar
-def redrawWindow():
+trajectoryLaunch=[]
+
+def redrawWindow(shooted):
     win.fill((64,64,64))
     golfBall.draw(win)
     pygame.draw.line(win, (0,0,0),line[0], line[1])
+    if shooted:
+        for i in range(int(len(trajectoryLaunch)/4)):
+            x1=trajectoryLaunch[i]
+            y1=trajectoryLaunch[i+1]
+            x2=trajectoryLaunch[i+2]
+            y2=trajectoryLaunch[i+3]
+            pygame.draw.line(win, (255,0,0),(x1,y1), (x2,y2))
+    else:
+        trajectoryLaunch.clear()
     pygame.display.update()
 
 #Encontrar El angulo
@@ -93,7 +107,7 @@ while run:
             golfBall.y = 494
 
     line = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
-    redrawWindow()
+    redrawWindow(shoot)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
