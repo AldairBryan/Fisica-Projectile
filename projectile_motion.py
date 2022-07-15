@@ -8,7 +8,6 @@ hScreen = 500
 rangoGanar=300
 posicionGanar=random.randint(750,1200-rangoGanar)
 
-
 #Info del Nivel
 nivel=2
 if nivel==1:
@@ -26,7 +25,6 @@ elif nivel==3:
     bg=pygame.image.load("fondo3.jpg")
     maximaFuerza=147
     controlarFuerza=1.33
-
 
 #Inicializa
 win = pygame.display.set_mode((wScreen,hScreen))
@@ -97,6 +95,14 @@ def drawInformation():
     text_surface = font_coordenadas.render('X:'+str(line[0][0])+'  Y: '+str(line[0][1]), False, (0, 0, 0))
     win.blit(text_surface, (line[0][0],line[0][1]-50))
 
+def showWinLose(estado):
+    if estado=='win':
+        bg=pygame.image.load("winner.jpg")
+    elif estado=='lose':
+        bg=pygame.image.load("loser.jpg")
+    win.blit(bg, (0, 0))
+    pygame.display.update()
+    
 #Linea donde se indica si gano o perdio
 def drawLineGame():
     pygame.draw.line(win, (255,0,0), (0,494), (posicionGanar,494))
@@ -180,7 +186,10 @@ while run:
 
     #Linea al mouse
     line = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
-    redrawWindow(shoot)
+    if status=='playing':
+        redrawWindow(shoot)
+    elif status=='win' or status=='lose':
+        showWinLose(status)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -196,6 +205,7 @@ while run:
                 else:
                     status='lose'
                     #Mostrar mensaje de Perdio
+
             elif status=='win' or status=='lose':
                 status='playing'
                 clearAll()
