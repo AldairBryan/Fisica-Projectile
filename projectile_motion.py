@@ -210,7 +210,7 @@ while run:
                 else:
                     status='lose'
                     #Mostrar mensaje de Perdio
-            elif not shoot:
+            elif not shoot and status =='playing':
                 x = golfBall.x
                 y = golfBall.y
                 pos =pygame.mouse.get_pos()
