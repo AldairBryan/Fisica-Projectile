@@ -7,7 +7,7 @@ wScreen = 1200
 hScreen = 500
 
 #Info del Nivel
-nivel=1
+nivel=3
 if nivel==1:
     gravedad=9.8
     rangoGanar=300
@@ -105,7 +105,7 @@ def showWinLose(estado):
         bg=pygame.image.load(path+"winner.png")
     elif estado=='lose':
         bg=pygame.image.load(path+"loser.png")
-    win.blit(bg, (0, 0))
+    win.blit(bg, (440, 100))
     pygame.display.update()
     
 #Linea donde se indica si gano o perdio

@@ -22,7 +22,7 @@ class Game():
         self.curr_menu = self.main_menu
         #---------#
         #Info del Nivel
-        self.nivel=3
+        self.nivel=1
         if self.nivel==1:
             self.gravedad=9.8
             self.rangoGanar=300
@@ -126,7 +126,7 @@ class Game():
             bg=pygame.image.load(path + "winner.png")
         elif estado=='lose':
             bg=pygame.image.load(path + "loser.png")
-        self.win.blit(bg, (0, 0))
+        self.win.blit(bg, (440, 100))
         pygame.display.update()
         
     #Linea donde se indica si gano o perdio
