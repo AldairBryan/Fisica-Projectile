@@ -1,5 +1,7 @@
 import pygame, math, random
 
+path='Resources/'
+
 #Tamaño de la Pantalla
 wScreen = 1200
 hScreen = 500
@@ -12,17 +14,17 @@ posicionGanar=random.randint(750,1200-rangoGanar)
 nivel=2
 if nivel==1:
     gravedad=9.8
-    bg=pygame.image.load("fondo1.jpg")
+    bg=pygame.image.load(path+"fondo1.jpg")
     maximaFuerza=93.1
     controlarFuerza=2.1
 elif nivel==2:
     gravedad=5.4
-    bg=pygame.image.load("fondo2.jpg")
+    bg=pygame.image.load(path+"fondo2.jpg")
     maximaFuerza=69.2
     controlarFuerza=3
 elif nivel==3:
     gravedad=24.3
-    bg=pygame.image.load("fondo3.jpg")
+    bg=pygame.image.load(path+"fondo3.jpg")
     maximaFuerza=147
     controlarFuerza=1.33
 
@@ -97,9 +99,9 @@ def drawInformation():
 
 def showWinLose(estado):
     if estado=='win':
-        bg=pygame.image.load("winner.jpg")
+        bg=pygame.image.load(path+"winner.jpg")
     elif estado=='lose':
-        bg=pygame.image.load("loser.jpg")
+        bg=pygame.image.load(path+"loser.jpg")
     win.blit(bg, (0, 0))
     pygame.display.update()
     
