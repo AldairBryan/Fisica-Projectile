@@ -210,12 +210,6 @@ while run:
                 else:
                     status='lose'
                     #Mostrar mensaje de Perdio
-
-            elif status=='win' or status=='lose':
-                status='playing'
-                clearAll()
-                golfBall = ball(300,494,5,(255,255,255))
-
             elif not shoot:
                 x = golfBall.x
                 y = golfBall.y
@@ -223,6 +217,15 @@ while run:
                 shoot = True
                 angle = findAngle(pos)
                 power = ajustarLimitePoder(x,y,pos)
+
+        if event.type == pygame.KEYDOWN and (status=='win' or status=='lose'):
+            if event.key == pygame.K_r:
+                status='playing'
+                clearAll()
+                golfBall = ball(300,494,5,(255,255,255))
+            elif event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                quit()
 
 pygame.quit()
 quit()
