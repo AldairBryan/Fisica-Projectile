@@ -1,5 +1,3 @@
-from asyncio.windows_events import NULL
-from turtle import clear
 import pygame, math, random
 
 #Tamaño de la Pantalla
@@ -134,6 +132,12 @@ def findAngle(pos):
         angle = (math.pi * 2) - angle
     return angle
 
+def ajustarLimitePoder(x,y,pos):
+    powerTemp= (math.hypot(pos[0]-x,pos[1]-y))/controlarFuerza
+    if powerTemp > maximaFuerza:
+        powerTemp=maximaFuerza
+    return powerTemp
+
 #Inicializar Pelota, Posicion, Color
 golfBall = ball(300,494,5,(255,255,255))
 
@@ -155,8 +159,7 @@ while run:
     #Informacion actual
     if status =='playing' and shoot==False:
         angle_act=findAngle(pygame.mouse.get_pos())
-        line_act = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
-        power_act=math.sqrt((line_act[1][1]-line_act[0][1])**2 +(line_act[1][0]-line_act[0][1])**2)/controlarFuerza
+        power_act=ajustarLimitePoder(golfBall.x,golfBall.y,pygame.mouse.get_pos())
 
     #Cuando la pelota haya sido disparada y este en el recorrido
     if shoot:
@@ -203,8 +206,8 @@ while run:
                 y = golfBall.y
                 pos =pygame.mouse.get_pos()
                 shoot = True
-                power = math.sqrt((line[1][1]-line[0][1])**2 +(line[1][0]-line[0][1])**2)/controlarFuerza
                 angle = findAngle(pos)
+                power = ajustarLimitePoder(x,y,pos)
 
 pygame.quit()
 quit()
