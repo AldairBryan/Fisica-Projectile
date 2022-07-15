@@ -1,30 +1,34 @@
 import pygame, math, random
 
+path='Resources/'
+
 #Tamaño de la Pantalla
 wScreen = 1200
 hScreen = 500
 
-#Posicion donde se puede generar el lugar donde deba aterrizar para ganar
-rangoGanar=300
-posicionGanar=random.randint(750,1200-rangoGanar)
-
 #Info del Nivel
-nivel=2
+nivel=1
 if nivel==1:
     gravedad=9.8
-    bg=pygame.image.load("fondo1.jpg")
+    rangoGanar=300
+    bg=pygame.image.load(path+"fondo1.jpg")
     maximaFuerza=93.1
     controlarFuerza=2.1
 elif nivel==2:
     gravedad=5.4
-    bg=pygame.image.load("fondo2.jpg")
+    rangoGanar=200
+    bg=pygame.image.load(path+"fondo2.jpg")
     maximaFuerza=69.2
     controlarFuerza=3
 elif nivel==3:
     gravedad=24.3
-    bg=pygame.image.load("fondo3.jpg")
+    rangoGanar=100
+    bg=pygame.image.load(path+"fondo3.jpg")
     maximaFuerza=147
     controlarFuerza=1.33
+
+#Posicion donde se puede generar el lugar donde deba aterrizar para ganar
+posicionGanar=random.randint(600,wScreen-rangoGanar)
 
 #Inicializa
 win = pygame.display.set_mode((wScreen,hScreen))
@@ -75,7 +79,8 @@ def redrawWindow(shooted):
     win.fill((64,64,64))
     win.blit(bg, (0, 0))
     golfBall.draw(win)
-    pygame.draw.line(win, (0,0,0),line[0], line[1])     #Linea del mouse
+    if not shooted:
+        pygame.draw.line(win, (255,255,255),line[0], line[1])     #Linea del mouse
     drawInformation()   #Mostrar Informacion del Nivel
     drawLineGame()      #Linea del Juego - Ganar/Perder
     drawParabol()       #Mostrar El movimiento Parabolico
@@ -87,19 +92,19 @@ def drawInformation():
     win.blit(text_info, (20,20))
     text_info=font_info.render('Gravedad: '+str(gravedad),False,(0,255,0))
     win.blit(text_info, (20,50))
-    text_info=font_info.render('Angulo: '+str(angle_act),False,(0,255,0))
+    text_info=font_info.render('Angulo: '+str(round((angle_act)*(180/math.pi),3))+' °',False,(0,255,0))
     win.blit(text_info, (20,80))
-    text_info=font_info.render('Fuerza: '+str(power_act),False,(0,255,0))
+    text_info=font_info.render('Fuerza: '+str(round(power_act,3)),False,(0,255,0))
     win.blit(text_info, (20,110))
     #Informacion de la posicion
-    text_surface = font_coordenadas.render('X:'+str(line[0][0])+'  Y: '+str(line[0][1]), False, (0, 0, 0))
+    text_surface = font_coordenadas.render('X:'+str(line[0][0])+'  Y: '+str(line[0][1]), False, (255, 255, 255))
     win.blit(text_surface, (line[0][0],line[0][1]-50))
 
 def showWinLose(estado):
     if estado=='win':
-        bg=pygame.image.load("winner.jpg")
+        bg=pygame.image.load(path+"winner.png")
     elif estado=='lose':
-        bg=pygame.image.load("loser.jpg")
+        bg=pygame.image.load(path+"loser.png")
     win.blit(bg, (0, 0))
     pygame.display.update()
     
@@ -205,19 +210,22 @@ while run:
                 else:
                     status='lose'
                     #Mostrar mensaje de Perdio
-
-            elif status=='win' or status=='lose':
-                status='playing'
-                clearAll()
-                golfBall = ball(300,494,5,(255,255,255))
-
-            elif not shoot:
+            elif not shoot and status =='playing':
                 x = golfBall.x
                 y = golfBall.y
                 pos =pygame.mouse.get_pos()
                 shoot = True
                 angle = findAngle(pos)
                 power = ajustarLimitePoder(x,y,pos)
+
+        if event.type == pygame.KEYDOWN and (status=='win' or status=='lose'):
+            if event.key == pygame.K_r:
+                status='playing'
+                clearAll()
+                golfBall = ball(300,494,5,(255,255,255))
+            elif event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                quit()
 
 pygame.quit()
 quit()
