@@ -12,16 +12,22 @@ posicionGanar=random.randint(750,1200-rangoGanar)
 
 
 #Info del Nivel
-nivel=1
+nivel=2
 if nivel==1:
     gravedad=9.8
     bg=pygame.image.load("fondo1.jpg")
+    maximaFuerza=93.1
+    controlarFuerza=2.1
 elif nivel==2:
     gravedad=5.4
     bg=pygame.image.load("fondo2.jpg")
+    maximaFuerza=69.2
+    controlarFuerza=3
 elif nivel==3:
     gravedad=24.3
     bg=pygame.image.load("fondo3.jpg")
+    maximaFuerza=147
+    controlarFuerza=1.33
 
 
 #Inicializa
@@ -150,7 +156,7 @@ while run:
     if status =='playing' and shoot==False:
         angle_act=findAngle(pygame.mouse.get_pos())
         line_act = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
-        power_act=math.sqrt((line_act[1][1]-line_act[0][1])**2 +(line_act[1][0]-line_act[0][1])**2)/5
+        power_act=math.sqrt((line_act[1][1]-line_act[0][1])**2 +(line_act[1][0]-line_act[0][1])**2)/controlarFuerza
 
     #Cuando la pelota haya sido disparada y este en el recorrido
     if shoot:
@@ -197,7 +203,7 @@ while run:
                 y = golfBall.y
                 pos =pygame.mouse.get_pos()
                 shoot = True
-                power = math.sqrt((line[1][1]-line[0][1])**2 +(line[1][0]-line[0][1])**2)/5
+                power = math.sqrt((line[1][1]-line[0][1])**2 +(line[1][0]-line[0][1])**2)/controlarFuerza
                 angle = findAngle(pos)
 
 pygame.quit()
