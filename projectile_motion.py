@@ -7,7 +7,7 @@ wScreen = 1200
 hScreen = 500
 
 #Info del Nivel
-nivel=1
+nivel=2
 if nivel==1:
     gravedad=9.8
     rangoGanar=300
@@ -92,7 +92,7 @@ def drawInformation():
     win.blit(text_info, (20,20))
     text_info=font_info.render('Gravedad: '+str(gravedad),False,(0,255,0))
     win.blit(text_info, (20,50))
-    text_info=font_info.render('Angulo: '+str(round(angle_act,3)),False,(0,255,0))
+    text_info=font_info.render('Angulo: '+str(round((angle_act)*(180/math.pi),3))+' °',False,(0,255,0))
     win.blit(text_info, (20,80))
     text_info=font_info.render('Fuerza: '+str(round(power_act,3)),False,(0,255,0))
     win.blit(text_info, (20,110))
