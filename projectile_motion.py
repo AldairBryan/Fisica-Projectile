@@ -170,6 +170,7 @@ while run:
             if status =='landed':
                 if golfBall.x > posicionGanar and golfBall.x < posicionGanar+rangoGanar:
                     status='win'
+                    posicionGanar=random.randint(750,1200-rangoGanar)
                     #Mostrar mensaje de Gano
                 else:
                     status='lose'
