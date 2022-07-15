@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from turtle import clear
 import pygame, math, random
 
@@ -5,12 +6,22 @@ import pygame, math, random
 wScreen = 1200
 hScreen = 500
 
-#Info del Nivel
-nivel=1
-gravedad=9.8
 #Posicion donde se puede generar el lugar donde deba aterrizar para ganar
 rangoGanar=300
 posicionGanar=random.randint(750,1200-rangoGanar)
+
+
+#Info del Nivel
+nivel=1
+if nivel==1:
+    gravedad=9.8
+    bg=pygame.image.load("fondo1.jpg")
+elif nivel==2:
+    gravedad=5.4
+    bg=pygame.image.load("fondo2.jpg")
+elif nivel==3:
+    gravedad=24.3
+    bg=pygame.image.load("fondo3.jpg")
 
 
 #Inicializa
@@ -60,6 +71,7 @@ trajectoryLaunch=[]
 #Iniciar
 def redrawWindow(shooted):
     win.fill((64,64,64))
+    win.blit(bg, (0, 0))
     golfBall.draw(win)
     pygame.draw.line(win, (0,0,0),line[0], line[1])     #Linea del mouse
     drawInformation()   #Mostrar Informacion del Nivel
