@@ -1,3 +1,4 @@
+from turtle import clear
 import pygame, math, random
 
 #Tamaño de la Pantalla
@@ -8,7 +9,9 @@ hScreen = 500
 nivel=1
 gravedad=9.8
 #Posicion donde se puede generar el lugar donde deba aterrizar para ganar
-posicionGanar=random.randint(750,1100)
+rangoGanar=300
+posicionGanar=random.randint(750,1200-rangoGanar)
+
 
 #Inicializa
 win = pygame.display.set_mode((wScreen,hScreen))
@@ -80,7 +83,6 @@ def drawInformation():
 
 #Linea donde se indica si gano o perdio
 def drawLineGame():
-    rangoGanar=100
     pygame.draw.line(win, (255,0,0), (0,494), (posicionGanar,494))
     pygame.draw.line(win, (0,255,0), (posicionGanar,494), (posicionGanar+rangoGanar,494))
     pygame.draw.line(win, (255,0,0), (posicionGanar+rangoGanar,494), (1200, 494))
@@ -123,9 +125,15 @@ power = 0
 angle = 0
 shoot = False
 clock = pygame.time.Clock()
+status='playing'
+
+def clearAll():
+    trajectoryLaunch.clear()
+    win.fill((64,64,64))
 
 while run:
     clock.tick(200)     #Reloj
+
     #Informacion actual
     angle_act=findAngle(pygame.mouse.get_pos())
     line_act = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
@@ -146,6 +154,7 @@ while run:
             shoot = False
             time = 0
             golfBall.y = 494
+            status='landed'
 
     #Linea al mouse
     line = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
@@ -157,7 +166,19 @@ while run:
 
         #Lanza
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if not shoot:
+            if status =='landed':
+                if golfBall.x > posicionGanar and golfBall.x < posicionGanar+rangoGanar:
+                    status='win'
+                    #Mostrar mensaje de Gano
+                else:
+                    status='lose'
+                    #Mostrar mensaje de Perdio
+            elif status=='win' or status=='lose':
+                status='playing'
+                clearAll()
+                golfBall = ball(300,494,5,(255,255,255))
+                
+            elif not shoot:
                 x = golfBall.x
                 y = golfBall.y
                 pos =pygame.mouse.get_pos()
