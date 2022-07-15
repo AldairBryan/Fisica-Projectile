@@ -6,10 +6,11 @@ path='Resources/'
 
 class Game():
     def __init__(self):
+        #---------#
         pygame.init()
         self.running, self.playing = True, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        self.DISPLAY_W, self.DISPLAY_H = 1200, 500
+        self.DISPLAY_W, self.DISPLAY_H = 1200, 500  #Tamaño de la Pantalla
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)))
         #self.font_name = '8-BIT WONDER.TTF'
@@ -19,9 +20,7 @@ class Game():
         self.options = OptionsMenu(self)
         self.credits = CreditsMenu(self)
         self.curr_menu = self.main_menu
-        #Tamaño de la Pantalla
-        self.wScreen = 1200
-        self.hScreen = 500
+        #---------#
         #Info del Nivel
         self.nivel=3
         if self.nivel==1:
@@ -43,9 +42,9 @@ class Game():
             self.maximaFuerza=147
             self.controlarFuerza=1.33
         #Posicion donde se puede generar el lugar donde deba aterrizar para ganar
-        self.posicionGanar=random.randint(600,self.wScreen-self.rangoGanar)
+        self.posicionGanar=random.randint(600,self.DISPLAY_W-self.rangoGanar)
         #Inicializa
-        self.win = pygame.display.set_mode((self.wScreen,self.hScreen))
+        self.win = pygame.display.set_mode((self.DISPLAY_W,self.DISPLAY_H))
         pygame.display.set_caption('Projectile Motion')
         pygame.font.init()
         #Fuentes Para los Textos
@@ -68,8 +67,6 @@ class Game():
             self.check_events()
             if self.START_KEY:
                 self.playing= False
-            #self.display.fill(self.BLACK)
-            #self.draw_text('Thanks for Playing', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)
             self.run_game()
             self.reset_keys()
 
@@ -103,7 +100,8 @@ class Game():
         self.win.fill((64,64,64))
         self.win.blit(self.bg, (0, 0))
         self.golfBall.draw(self.win)
-        pygame.draw.line(self.win, (0,0,0),self.line[0], self.line[1])     #Linea del mouse
+        if not shooted:
+            pygame.draw.line(self.win, (255,255,255),self.line[0], self.line[1])
         self.drawInformation()   #Mostrar Informacion del Nivel
         self.drawLineGame()      #Linea del Juego - Ganar/Perder
         self.drawParabol()       #Mostrar El movimiento Parabolico
@@ -115,13 +113,13 @@ class Game():
         self.win.blit(text_info, (20,20))
         text_info=self.font_info.render('Gravedad: '+str(self.gravedad),False,(0,255,0))
         self.win.blit(text_info, (20,50))
-        text_info=self.font_info.render('Angulo: '+str(self.angle_act),False,(0,255,0))
+        text_info=self.font_info.render('Angulo: '+str(round((self.angle_act)*(180/math.pi),3))+' °',False,(0,255,0))
         self.win.blit(text_info, (20,80))
-        text_info=self.font_info.render('Fuerza: '+str(self.power_act),False,(0,255,0))
+        text_info=self.font_info.render('Fuerza: '+str(round(self.power_act,3)),False,(0,255,0))
         self.win.blit(text_info, (20,110))
         #Informacion de la posicion
-        text_surface = self.font_coordenadas.render('X:'+str(self.line[0][0])+'  Y: '+str(self.line[0][1]), False, (0, 0, 0))
-        self.win.blit(text_surface, (self.line[0][0],self.line[0][1]-50))
+        self.text_surface = self.font_coordenadas.render('X:'+str(self.line[0][0])+'  Y: '+str(self.line[0][1]), False, (255, 255, 255))
+        self.win.blit(self.text_surface, (self.line[0][0],self.line[0][1]-50))
 
     def showWinLose(self, estado):
         if estado=='win':

@@ -12,7 +12,6 @@ class ball(object):
         pygame.draw.circle(win, (0,0,0), (self.x,self.y), self.radius)
         pygame.draw.circle(win, self.color, (self.x,self.y), self.radius-1)
 
-
     #Recorrido de La Pelota
     @staticmethod
     def ballPath(startx, starty, power, ang, time, gravedad):
