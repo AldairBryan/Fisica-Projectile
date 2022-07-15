@@ -2,12 +2,14 @@ import pygame, math, random
 from menu import *
 from ball import ball
 
+path='Resources/'
+
 class Game():
     def __init__(self):
         pygame.init()
         self.running, self.playing = True, False
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        self.DISPLAY_W, self.DISPLAY_H = 960, 540
+        self.DISPLAY_W, self.DISPLAY_H = 1200, 500
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
         self.window = pygame.display.set_mode(((self.DISPLAY_W,self.DISPLAY_H)))
         #self.font_name = '8-BIT WONDER.TTF'
@@ -20,26 +22,28 @@ class Game():
         #Tamaño de la Pantalla
         self.wScreen = 1200
         self.hScreen = 500
-        #Posicion donde se puede generar el lugar donde deba aterrizar para ganar
-        self.rangoGanar=300
-        self.posicionGanar=random.randint(750,1200-self.rangoGanar)
         #Info del Nivel
-        self.nivel=2
+        self.nivel=3
         if self.nivel==1:
             self.gravedad=9.8
-            self.bg=pygame.image.load("fondo1.jpg")
+            self.rangoGanar=300
+            self.bg=pygame.image.load(path+"fondo1.jpg")
             self.maximaFuerza=93.1
             self.controlarFuerza=2.1
         elif self.nivel==2:
             self.gravedad=5.4
-            self.bg=pygame.image.load("fondo2.jpg")
+            self.rangoGanar=200
+            self.bg=pygame.image.load(path+"fondo2.jpg")
             self.maximaFuerza=69.2
             self.controlarFuerza=3
         elif self.nivel==3:
             self.gravedad=24.3
-            self.bg=pygame.image.load("fondo3.jpg")
+            self.rangoGanar=100
+            self.bg=pygame.image.load(path+"fondo3.jpg")
             self.maximaFuerza=147
             self.controlarFuerza=1.33
+        #Posicion donde se puede generar el lugar donde deba aterrizar para ganar
+        self.posicionGanar=random.randint(600,self.wScreen-self.rangoGanar)
         #Inicializa
         self.win = pygame.display.set_mode((self.wScreen,self.hScreen))
         pygame.display.set_caption('Projectile Motion')
@@ -67,8 +71,6 @@ class Game():
             #self.display.fill(self.BLACK)
             #self.draw_text('Thanks for Playing', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)
             self.run_game()
-            self.window.blit(self.display, (0,0))
-            pygame.display.update()
             self.reset_keys()
 
     def check_events(self):
@@ -123,9 +125,9 @@ class Game():
 
     def showWinLose(self, estado):
         if estado=='win':
-            bg=pygame.image.load("winner.jpg")
+            bg=pygame.image.load(path + "winner.png")
         elif estado=='lose':
-            bg=pygame.image.load("loser.jpg")
+            bg=pygame.image.load(path + "loser.png")
         self.win.blit(bg, (0, 0))
         pygame.display.update()
         
@@ -175,62 +177,64 @@ class Game():
         self.win.fill((64,64,64))
 
     def run_game(self):
-        while self.run:
-            self.clock.tick(200)     #Reloj
+        self.clock.tick(200)     #Reloj
 
-            #Informacion actual
-            if self.status =='playing' and self.shoot==False:
-                self.angle_act=self.findAngle(pygame.mouse.get_pos())
-                self.power_act=self.ajustarLimitePoder(self.golfBall.x,self.golfBall.y,pygame.mouse.get_pos())
+        #Informacion actual
+        if self.status =='playing' and self.shoot==False:
+            self.angle_act=self.findAngle(pygame.mouse.get_pos())
+            self.power_act=self.ajustarLimitePoder(self.golfBall.x,self.golfBall.y,pygame.mouse.get_pos())
 
-            #Cuando la pelota haya sido disparada y este en el recorrido
-            if self.shoot:
-                if self.golfBall.y < 500 - self.golfBall.radius:
-                    self.trajectoryLaunch.append(self.golfBall.x)     #Agregamos posicion actual
-                    self.trajectoryLaunch.append(self.golfBall.y)
-                    self.time += 0.05
-                    self.po = ball.ballPath(self.x, self.y, self.power, self.angle, self.time, self.gravedad)    #Recorrido
-                    self.golfBall.x = self.po[0]
-                    self.golfBall.y = self.po[1]
-                    self.trajectoryLaunch.append(self.golfBall.x)     #Agregamos posicion nueva
-                    self.trajectoryLaunch.append(self.golfBall.y)
-                else:       #Aterrizo
-                    self.shoot = False
-                    self.time = 0
-                    self.golfBall.y = 494
-                    self.status='landed'
+        #Cuando la pelota haya sido disparada y este en el recorrido
+        if self.shoot:
+            if self.golfBall.y < 500 - self.golfBall.radius:
+                self.trajectoryLaunch.append(self.golfBall.x)     #Agregamos posicion actual
+                self.trajectoryLaunch.append(self.golfBall.y)
+                self.time += 0.05
+                self.po = ball.ballPath(self.x, self.y, self.power, self.angle, self.time, self.gravedad)    #Recorrido
+                self.golfBall.x = self.po[0]
+                self.golfBall.y = self.po[1]
+                self.trajectoryLaunch.append(self.golfBall.x)     #Agregamos posicion nueva
+                self.trajectoryLaunch.append(self.golfBall.y)
+            else:       #Aterrizo
+                self.shoot = False
+                self.time = 0
+                self.golfBall.y = 494
+                self.status='landed'
 
-            #Linea al mouse
-            self.line = [(self.golfBall.x, self.golfBall.y), pygame.mouse.get_pos()]
-            if self.status=='playing':
-                self.redrawWindow(self.shoot)
-            elif self.status=='win' or self.status=='lose':
-                self.showWinLose(self.status)
+        #Linea al mouse
+        self.line = [(self.golfBall.x, self.golfBall.y), pygame.mouse.get_pos()]
+        if self.status=='playing':
+            self.redrawWindow(self.shoot)
+        elif self.status=='win' or self.status=='lose':
+            self.showWinLose(self.status)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.run = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.run = False
 
-                #Lanza
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.status =='landed':
-                        if self.golfBall.x > self.posicionGanar and self.golfBall.x < self.posicionGanar+self.rangoGanar:
-                            self.status='win'
-                            self.posicionGanar=random.randint(750,1200-self.rangoGanar)
-                            #Mostrar mensaje de Gano
-                        else:
-                            self.status='lose'
-                            #Mostrar mensaje de Perdio
+            #Lanza
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.status =='landed':
+                    if self.golfBall.x > self.posicionGanar and self.golfBall.x < self.posicionGanar+self.rangoGanar:
+                        self.status='win'
+                        self.posicionGanar=random.randint(750,1200-self.rangoGanar)
+                        #Mostrar mensaje de Gano
+                    else:
+                        self.status='lose'
+                        #Mostrar mensaje de Perdio
+                elif not self.shoot and self.status =='playing':
+                    self.x = self.golfBall.x
+                    self.y = self.golfBall.y
+                    self.pos = pygame.mouse.get_pos()
+                    self.shoot = True
+                    self.angle = self.findAngle(self.pos)
+                    self.power = self.ajustarLimitePoder(self.x,self.y,self.pos)
 
-                    elif self.status=='win' or self.status=='lose':
-                        self.status='playing'
-                        self.clearAll()
-                        self.golfBall = ball(300,494,5,(255,255,255))
-
-                    elif not self.shoot:
-                        self.x = self.golfBall.x
-                        self.y = self.golfBall.y
-                        self.pos = pygame.mouse.get_pos()
-                        self.shoot = True
-                        self.angle = self.findAngle(self.pos)
-                        self.power = self.ajustarLimitePoder(self.x,self.y,self.pos)
+            if event.type == pygame.KEYDOWN and (self.status=='win' or self.status=='lose'):
+                if event.key == pygame.K_r:
+                    self.status='playing'
+                    self.clearAll()
+                    self.golfBall = ball(300,494,5,(255,255,255))
+                elif event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    quit()
