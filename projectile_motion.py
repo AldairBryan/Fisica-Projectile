@@ -135,9 +135,10 @@ while run:
     clock.tick(200)     #Reloj
 
     #Informacion actual
-    angle_act=findAngle(pygame.mouse.get_pos())
-    line_act = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
-    power_act=math.sqrt((line_act[1][1]-line_act[0][1])**2 +(line_act[1][0]-line_act[0][1])**2)/5
+    if status =='playing' and shoot==False:
+        angle_act=findAngle(pygame.mouse.get_pos())
+        line_act = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
+        power_act=math.sqrt((line_act[1][1]-line_act[0][1])**2 +(line_act[1][0]-line_act[0][1])**2)/5
 
     #Cuando la pelota haya sido disparada y este en el recorrido
     if shoot:
@@ -177,7 +178,7 @@ while run:
                 status='playing'
                 clearAll()
                 golfBall = ball(300,494,5,(255,255,255))
-                
+
             elif not shoot:
                 x = golfBall.x
                 y = golfBall.y
