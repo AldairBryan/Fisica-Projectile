@@ -1,4 +1,3 @@
-from pickletools import pyfloat
 import pygame
 import math
 
@@ -6,11 +5,19 @@ import math
 wScreen = 1200
 hScreen = 500
 
+#Info del Nivel
+nivel=1
+gravedad=9.8
+power_act=0
+forze_act=0
+
 #Inicializa
 win = pygame.display.set_mode((wScreen,hScreen))
 pygame.display.set_caption('Projectile Motion')
 pygame.font.init()
-my_font = pygame.font.SysFont('Comic Sans MS', 23)
+
+font_coordenadas = pygame.font.SysFont('Comic Sans MS', 23)
+font_info = pygame.font.SysFont('Comic Sans MS', 20)
 
 #Objeto Pelota
 class ball(object):
@@ -34,8 +41,6 @@ class ball(object):
         velx = math.cos(angle) * power
         vely = math.sin(angle) * power
 
-        gravedad=9.8
-
         #Movimiento
         distX = velx * time
         distY = (vely * time) + ((-gravedad * (time ** 2)) / 2)  #Gravedad
@@ -52,28 +57,41 @@ class ball(object):
 trajectoryLaunch=[]
 
 def redrawWindow(shooted):
+
     win.fill((64,64,64))
     golfBall.draw(win)
     pygame.draw.line(win, (0,0,0),line[0], line[1])
-
-    text_surface = my_font.render('X:'+str(line[0][0])+'  Y: '+str(line[0][1]), False, (0, 0, 0))
-    win.blit(text_surface, (line[0][0],line[0][1]))
-
-    if shooted:
-        for i in range(int(len(trajectoryLaunch)/4)):
-            x1=trajectoryLaunch[(i*4)]
-            y1=trajectoryLaunch[(i*4)+1]
-            x2=trajectoryLaunch[(i*4)+2]
-            y2=trajectoryLaunch[(i*4)+3]
-            pygame.draw.line(win, (255,0,0),(x1,y1), (x2,y2),width=2)
-    else:
-        trajectoryLaunch.clear()
+    drawInformation()
+    drawParabol()
     pygame.display.update()
+
+def drawInformation():
+
+    text_info=font_info.render('Nivel: '+str(nivel),False,(0,255,0))
+    win.blit(text_info, (20,20))
+    text_info=font_info.render('Gravedad: '+str(gravedad),False,(0,255,0))
+    win.blit(text_info, (20,50))
+    text_info=font_info.render('Angulo: '+str(angle_act),False,(0,255,0))
+    win.blit(text_info, (20,80))
+    text_info=font_info.render('Fuerza: '+str(power_act),False,(0,255,0))
+    win.blit(text_info, (20,110))
+
+    text_surface = font_coordenadas.render('X:'+str(line[0][0])+'  Y: '+str(line[0][1]), False, (0, 0, 0))
+    win.blit(text_surface, (line[0][0],line[0][1]-50))
+
+def drawParabol():
+    for i in range(int(len(trajectoryLaunch)/4)):
+        x1=trajectoryLaunch[(i*4)]
+        y1=trajectoryLaunch[(i*4)+1]
+        x2=trajectoryLaunch[(i*4)+2]
+        y2=trajectoryLaunch[(i*4)+3]
+        pygame.draw.line(win, (255,0,0),(x1,y1), (x2,y2),width=2)
 
 #Encontrar El angulo
 def findAngle(pos):
     sX = golfBall.x
     sY = golfBall.y
+
     try:
         angle = math.atan((sY - pos[1]) / (sX - pos[0]))
     except:
@@ -87,7 +105,6 @@ def findAngle(pos):
         angle = math.pi + abs(angle)
     elif pos[1] > sY and pos[0] > sX:
         angle = (math.pi * 2) - angle
-
     return angle
 
 
@@ -102,6 +119,9 @@ shoot = False
 clock = pygame.time.Clock()
 while run:
     clock.tick(200)
+    angle_act=findAngle(pygame.mouse.get_pos())
+    line_act = [(golfBall.x, golfBall.y), pygame.mouse.get_pos()]
+    power_act=math.sqrt((line_act[1][1]-line_act[0][1])**2 +(line_act[1][0]-line_act[0][1])**2)/5
     if shoot:
         if golfBall.y < 500 - golfBall.radius:
             trajectoryLaunch.append(golfBall.x)
@@ -132,8 +152,6 @@ while run:
                 shoot = True
                 power = math.sqrt((line[1][1]-line[0][1])**2 +(line[1][0]-line[0][1])**2)/5
                 angle = findAngle(pos)
-
-
 
 pygame.quit()
 quit()
