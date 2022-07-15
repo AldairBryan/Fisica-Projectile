@@ -6,27 +6,31 @@ path='Resources/'
 wScreen = 1200
 hScreen = 500
 
-#Posicion donde se puede generar el lugar donde deba aterrizar para ganar
-rangoGanar=300
-posicionGanar=random.randint(750,1200-rangoGanar)
+
 
 #Info del Nivel
-nivel=2
+nivel=3
 if nivel==1:
     gravedad=9.8
+    rangoGanar=300
     bg=pygame.image.load(path+"fondo1.jpg")
     maximaFuerza=93.1
     controlarFuerza=2.1
 elif nivel==2:
     gravedad=5.4
+    rangoGanar=200
     bg=pygame.image.load(path+"fondo2.jpg")
     maximaFuerza=69.2
     controlarFuerza=3
 elif nivel==3:
     gravedad=24.3
+    rangoGanar=100
     bg=pygame.image.load(path+"fondo3.jpg")
     maximaFuerza=147
     controlarFuerza=1.33
+
+#Posicion donde se puede generar el lugar donde deba aterrizar para ganar
+posicionGanar=random.randint(600,wScreen-rangoGanar)
 
 #Inicializa
 win = pygame.display.set_mode((wScreen,hScreen))
