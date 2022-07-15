@@ -1,5 +1,4 @@
-import pygame
-import math
+import pygame, math, random
 
 #Tamaño de la Pantalla
 wScreen = 1200
@@ -8,6 +7,8 @@ hScreen = 500
 #Info del Nivel
 nivel=1
 gravedad=9.8
+#Posicion donde se puede generar el lugar donde deba aterrizar para ganar
+posicionGanar=random.randint(750,1100)
 
 #Inicializa
 win = pygame.display.set_mode((wScreen,hScreen))
@@ -55,11 +56,11 @@ trajectoryLaunch=[]
 
 #Iniciar
 def redrawWindow(shooted):
-
     win.fill((64,64,64))
     golfBall.draw(win)
     pygame.draw.line(win, (0,0,0),line[0], line[1])     #Linea del mouse
     drawInformation()   #Mostrar Informacion del Nivel
+    drawLineGame()      #Linea del Juego - Ganar/Perder
     drawParabol()       #Mostrar El movimiento Parabolico
     pygame.display.update()
 
@@ -76,6 +77,13 @@ def drawInformation():
     #Informacion de la posicion
     text_surface = font_coordenadas.render('X:'+str(line[0][0])+'  Y: '+str(line[0][1]), False, (0, 0, 0))
     win.blit(text_surface, (line[0][0],line[0][1]-50))
+
+#Linea donde se indica si gano o perdio
+def drawLineGame():
+    rangoGanar=100
+    pygame.draw.line(win, (255,0,0), (0,494), (posicionGanar,494))
+    pygame.draw.line(win, (0,255,0), (posicionGanar,494), (posicionGanar+rangoGanar,494))
+    pygame.draw.line(win, (255,0,0), (posicionGanar+rangoGanar,494), (1200, 494))
 
 #Muestra la Parabola
 def drawParabol():
@@ -105,7 +113,6 @@ def findAngle(pos):
     elif pos[1] > sY and pos[0] > sX:
         angle = (math.pi * 2) - angle
     return angle
-
 
 #Inicializar Pelota, Posicion, Color
 golfBall = ball(300,494,5,(255,255,255))
