@@ -118,8 +118,13 @@ class Game():
         text_info=self.font_info.render('Fuerza: '+str(round(self.power_act,3)),False,(0,255,0))
         self.win.blit(text_info, (20,110))
         #Informacion de la posicion
-        self.text_surface = self.font_coordenadas.render('X:'+str(self.golfBall.x-300)+'  Y: '+str((self.golfBall.y*-1)+494), False, (255, 255, 255))
-        self.win.blit(self.text_surface, (self.line[0][0],self.line[0][1]-50))
+        if(self.golfBall.y>=494):
+            yDisplay=494
+            self.text_surface = self.font_coordenadas.render('X:'+str(self.golfBall.x-300)+'  Y: '+str(0), False, (255, 255, 255))
+            self.win.blit(self.text_surface, (self.line[0][0],self.line[0][1]-50))
+        else:
+            self.text_surface = self.font_coordenadas.render('X:'+str(self.golfBall.x-300)+'  Y: '+str((self.golfBall.y*-1)+494), False, (255, 255, 255))
+            self.win.blit(self.text_surface, (self.line[0][0],self.line[0][1]-50))
 
     def showWinLose(self, estado):
         if estado=='win':
