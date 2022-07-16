@@ -117,9 +117,14 @@ class Game():
         self.win.blit(text_info, (20,80))
         text_info=self.font_info.render('Fuerza: '+str(round(self.power_act,3)),False,(0,255,0))
         self.win.blit(text_info, (20,110))
+        #Posicion del Rango para Ganar
+        print(str(self.posicionGanar))
+        text_surface = self.font_coordenadas.render(str(self.posicionGanar), False, (255, 255, 255))
+        self.win.blit(text_surface, (self.posicionGanar-40,454))
+        text_surface = self.font_coordenadas.render(str(self.posicionGanar+self.rangoGanar), False, (255, 255, 255))
+        self.win.blit(text_surface, (self.posicionGanar+self.rangoGanar-50,454))
         #Informacion de la posicion
         if(self.golfBall.y>=494):
-            yDisplay=494
             self.text_surface = self.font_coordenadas.render('X:'+str(self.golfBall.x-300)+'  Y: '+str(0), False, (255, 255, 255))
             self.win.blit(self.text_surface, (self.line[0][0],self.line[0][1]-50))
         else:
