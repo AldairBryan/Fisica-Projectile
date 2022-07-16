@@ -119,9 +119,9 @@ class Game():
         self.win.blit(text_info, (20,110))
         #Posicion del Rango para Ganar
         print(str(self.posicionGanar))
-        text_surface = self.font_coordenadas.render(str(self.posicionGanar), False, (255, 255, 255))
+        text_surface = self.font_coordenadas.render(str(self.posicionGanar-300), False, (255, 255, 255))
         self.win.blit(text_surface, (self.posicionGanar-40,454))
-        text_surface = self.font_coordenadas.render(str(self.posicionGanar+self.rangoGanar), False, (255, 255, 255))
+        text_surface = self.font_coordenadas.render(str(self.posicionGanar+self.rangoGanar-300), False, (255, 255, 255))
         self.win.blit(text_surface, (self.posicionGanar+self.rangoGanar-50,454))
         #Informacion de la posicion
         if(self.golfBall.y>=494):
