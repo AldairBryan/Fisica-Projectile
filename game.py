@@ -111,13 +111,13 @@ class Game():
         #Informacion del NIvel
         text_info=self.font_info.render('Nivel: '+str(self.nivel),False,(0,255,0))
         self.win.blit(text_info, (20,20))
-        text_info=self.font_info.render('Gravedad: '+str(self.gravedad),False,(0,255,0))
+        text_info=self.font_info.render('Gravedad: '+str(self.gravedad)+'  m/s^2',False,(0,255,0))
         self.win.blit(text_info, (20,50))
-        text_info=self.font_info.render('Angulo: '+str(round((self.angle_act)*(180/math.pi),3))+' °',False,(0,255,0))
+        text_info=self.font_info.render('Angulo: '+str(round((self.angle_act)*(180/math.pi),3))+'  °',False,(0,255,0))
         self.win.blit(text_info, (20,80))
-        text_info=self.font_info.render('Velocidad: '+str(round(self.power_act,3)),False,(0,255,0))
+        text_info=self.font_info.render('Velocidad: '+str(round(self.power_act,3))+'  m/s',False,(0,255,0))
         self.win.blit(text_info, (20,110))
-        text_info=self.font_info.render('Tiempo: '+str(round(self.time,3)),False,(0,255,0))
+        text_info=self.font_info.render('Tiempo: '+str(round(self.time,3))+'  s',False,(0,255,0))
         self.win.blit(text_info, (20,140))
         #Posicion del Rango para Ganar
         text_surface = self.font_coordenadas.render(str(self.posicionGanar-300), False, (255, 255, 255))
