@@ -118,7 +118,6 @@ class Game():
         text_info=self.font_info.render('Fuerza: '+str(round(self.power_act,3)),False,(0,255,0))
         self.win.blit(text_info, (20,110))
         #Posicion del Rango para Ganar
-        print(str(self.posicionGanar))
         text_surface = self.font_coordenadas.render(str(self.posicionGanar-300), False, (255, 255, 255))
         self.win.blit(text_surface, (self.posicionGanar-40,454))
         text_surface = self.font_coordenadas.render(str(self.posicionGanar+self.rangoGanar-300), False, (255, 255, 255))
@@ -208,6 +207,7 @@ class Game():
                 self.time = 0
                 self.golfBall.y = 494
                 self.status='landed'
+                print(str(self.golfBall.x-300))
 
         #Linea al mouse
         self.line = [(self.golfBall.x, self.golfBall.y), pygame.mouse.get_pos()]
